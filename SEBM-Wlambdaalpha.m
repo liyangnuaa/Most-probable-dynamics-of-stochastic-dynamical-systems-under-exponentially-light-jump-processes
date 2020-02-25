@@ -113,11 +113,11 @@ x0=alpha001';
 y0=Calpha';
 syms t
 % f=fittype('k1/(t+r1)^r2+k2','independent','t','coefficients',{'r1','r2','k1','k2'});
-% cfun=fit(x0,y0,f,'StartPoint',[3,4,-1e5,38]); %ÏÔÊ¾ÄâºÏº¯Êı£¬Êı¾İ±ØĞëÎªÁĞÏòÁ¿ĞÎÊ½
+% cfun=fit(x0,y0,f,'StartPoint',[3,4,-1e5,38]); %æ˜¾ç¤ºæ‹Ÿåˆå‡½æ•°ï¼Œæ•°æ®å¿…é¡»ä¸ºåˆ—å‘é‡å½¢å¼
 f=fittype('k1*exp(-r1*t^r2)+k2','independent','t','coefficients',{'r1','r2','k1','k2'});
-cfun=fit(x0,y0,f,'StartPoint',[1,1,-1e2,38]); %ÏÔÊ¾ÄâºÏº¯Êı£¬Êı¾İ±ØĞëÎªÁĞÏòÁ¿ĞÎÊ½
+cfun=fit(x0,y0,f,'StartPoint',[1,1,-1e2,38]); %æ˜¾ç¤ºæ‹Ÿåˆå‡½æ•°ï¼Œæ•°æ®å¿…é¡»ä¸ºåˆ—å‘é‡å½¢å¼
 xi=1:0.01:7;
 yi=cfun(xi);
 figure;
 plot(alpha001',Calpha','r*',xi,yi,'b-');
-title('ÄâºÏº¯ÊıÍ¼ĞÎ');
+title('æ‹Ÿåˆå‡½æ•°å›¾å½¢');
