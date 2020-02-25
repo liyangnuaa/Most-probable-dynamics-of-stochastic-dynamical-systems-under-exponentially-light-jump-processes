@@ -84,7 +84,7 @@ plot(X(1,:),X(2,:));
 figure;
 plot(X(1,:),X(3,:));
 
-%%% 确定性势阱
+%%% 脠路露篓脨脭脢脝脷氓
 xdet=linspace(200,310,10000);
 UT=(-1/4*S0*(0.5*xdet+2*log(cosh((xdet-265)/10)))+1/5*gamma*theta*xdet.^5)/Ch;
 figure;
@@ -101,3 +101,25 @@ plot(xdet,(UT-min(UT))/67,'r-');
 % plot(x,y0);
 % grid on
 % hold off
+
+
+function xout=rk4(t0,h,x0)
+k1=h*fun(t0,x0);
+k2=h*fun(t0+h/2,x0+0.5*k1);
+k3=h*fun(t0+h/2,x0+0.5*k2);
+k4=h*fun(t0+h,x0+k3);
+xout=x0+(k1+2*k2+2*k3+k4)/6;
+
+
+function y=fun(~,x)
+
+global r1 r2 alpha lambda Ch gamma theta S0
+
+fx=@(t)r2*t.*exp(r2*x(2)*t-lambda*abs(t).^alpha);
+f2=@(t)(r2*t*x(2).*exp(r2*t*x(2))-exp(r2*t*x(2))+1).*exp(-lambda*abs(t).^alpha);
+y=zeros(size(x));
+y(1)=(S0*(0.5+0.2*tanh((x(1)-265)/10))/4-gamma*theta*x(1)^4)/Ch+r1^2*x(2)+quadgk(fx,-inf,inf);
+y(2)=-(-((S0*(tanh(x(1)/10 - 53/2)^2/50 - 1/50))/4 + 4*gamma*theta*x(1)^3)/Ch)*x(2);
+y(3)=x(2)*y(1);
+y(4)=1/2*r1^2*x(2)^2;
+y(5)=quadgk(f2,-inf,inf);
