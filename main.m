@@ -53,8 +53,8 @@ B0=-[C(1,1);C(1,2);C(2,2)];
 s=A0\B0;
 Z=inv([s(1) s(2);s(2) s(3)]);
 
-Nphi=1000;            % »·ÉÏ»®·Ö¾«¶È
-Sphi=zeros(1,Nphi);    % ËùÓĞµÄphiÖĞSµÄ×îĞ¡Öµ
+Nphi=1000;            % ç¯ä¸Šåˆ’åˆ†ç²¾åº¦
+Sphi=zeros(1,Nphi);    % æ‰€æœ‰çš„phiä¸­Sçš„æœ€å°å€¼
 phi=linspace(0,2*pi,Nphi);
 % phi1=linspace(0,0.01,Nphi/2);
 % phi2=linspace(2*pi-0.01,2*pi,Nphi/2);
@@ -128,3 +128,28 @@ plot([-0.1 1.2],[0.004 0.004]);
 hold on
 plot([1.2 1.2],[0 0.004]);
 hold off
+
+
+function xout=rk4(t0,h,x0)
+k1=h*fun(t0,x0);
+k2=h*fun(t0+h/2,x0+0.5*k1);
+k3=h*fun(t0+h/2,x0+0.5*k2);
+k4=h*fun(t0+h,x0+k3);
+xout=x0+(k1+2*k2+2*k3+k4)/6;
+
+
+function y=fun(~,x)
+
+global r1 r2 alpha1 lambda1 alpha2 lambda2 gamma miu
+
+f10=@(t)exp(r2*x(3)*t-lambda1*abs(t).^alpha1);
+f11=@(t)t.*exp(r2*x(3)*t-lambda1*abs(t).^alpha1);
+f20=@(t)exp(r2*x(4)*t-lambda2*abs(t).^alpha2);
+f21=@(t)t.*exp(r2*x(4)*t-lambda2*abs(t).^alpha2);
+
+y=zeros(size(x));
+y(1)=x(1)-x(1)^3-gamma*x(1)*x(2)^2+r1^2*x(3)+r2*quadgk(f11,-inf,inf)*quadgk(f20,-inf,inf);
+y(2)=-miu*(1+x(1)^2)*x(2)+r1^2*x(4)+r2*quadgk(f10,-inf,inf)*quadgk(f21,-inf,inf);
+y(3)=-(1-3*x(1)^2-gamma*x(2)^2)*x(3)+2*miu*x(1)*x(2)*x(4);
+y(4)=2*gamma*x(1)*x(2)*x(3)+miu*(1+x(1)^2)*x(4);
+y(5)=x(3)*y(1)+x(4)*y(2);
